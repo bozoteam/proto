@@ -5,5 +5,40 @@
 // source: options/authorization_required.proto
 
 /* eslint-disable */
+import { BinaryReader, BinaryWriter } from "@bufbuild/protobuf/wire";
 
 export const protobufPackage = "roshan.authorization";
+
+export const required: Extension<boolean> = {
+  number: 50000,
+  tag: 400000,
+  repeated: false,
+  packed: false,
+  encode: (value: boolean): Uint8Array[] => {
+    const encoded: Uint8Array[] = [];
+    if (value !== false) {
+      const writer = new BinaryWriter();
+      writer.bool(value);
+      encoded.push(writer.finish());
+    }
+    return encoded;
+  },
+  decode: (tag: number, input: Uint8Array[]): boolean => {
+    const reader = new BinaryReader(input[input.length - 1] ?? fail());
+    return reader.bool();
+  },
+};
+
+export interface Extension<T> {
+  number: number;
+  tag: number;
+  singularTag?: number;
+  encode?: (message: T) => Uint8Array[];
+  decode?: (tag: number, input: Uint8Array[]) => T;
+  repeated: boolean;
+  packed: boolean;
+}
+
+function fail(message?: string): never {
+  throw new globalThis.Error(message ?? "Failed");
+}

@@ -53,7 +53,9 @@ function createBaseUser(): User {
   return { id: "", name: "", email: "" };
 }
 
-export const User: MessageFns<User> = {
+export const User: MessageFns<User, "roshan.user.User"> = {
+  $type: "roshan.user.User" as const,
+
   encode(message: User, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
     if (message.id !== "") {
       writer.uint32(10).string(message.id);
@@ -145,7 +147,9 @@ function createBaseCreateUserRequest(): CreateUserRequest {
   return { name: "", email: "", password: "" };
 }
 
-export const CreateUserRequest: MessageFns<CreateUserRequest> = {
+export const CreateUserRequest: MessageFns<CreateUserRequest, "roshan.user.CreateUserRequest"> = {
+  $type: "roshan.user.CreateUserRequest" as const,
+
   encode(message: CreateUserRequest, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
     if (message.name !== "") {
       writer.uint32(10).string(message.name);
@@ -237,7 +241,9 @@ function createBaseCreateUserResponse(): CreateUserResponse {
   return { user: undefined };
 }
 
-export const CreateUserResponse: MessageFns<CreateUserResponse> = {
+export const CreateUserResponse: MessageFns<CreateUserResponse, "roshan.user.CreateUserResponse"> = {
+  $type: "roshan.user.CreateUserResponse" as const,
+
   encode(message: CreateUserResponse, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
     if (message.user !== undefined) {
       User.encode(message.user, writer.uint32(10).fork()).join();
@@ -295,7 +301,9 @@ function createBaseUpdateUserRequest(): UpdateUserRequest {
   return { name: undefined, email: undefined, password: undefined };
 }
 
-export const UpdateUserRequest: MessageFns<UpdateUserRequest> = {
+export const UpdateUserRequest: MessageFns<UpdateUserRequest, "roshan.user.UpdateUserRequest"> = {
+  $type: "roshan.user.UpdateUserRequest" as const,
+
   encode(message: UpdateUserRequest, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
     if (message.name !== undefined) {
       writer.uint32(10).string(message.name);
@@ -387,7 +395,9 @@ function createBaseUpdateUserResponse(): UpdateUserResponse {
   return { user: undefined };
 }
 
-export const UpdateUserResponse: MessageFns<UpdateUserResponse> = {
+export const UpdateUserResponse: MessageFns<UpdateUserResponse, "roshan.user.UpdateUserResponse"> = {
+  $type: "roshan.user.UpdateUserResponse" as const,
+
   encode(message: UpdateUserResponse, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
     if (message.user !== undefined) {
       User.encode(message.user, writer.uint32(10).fork()).join();
@@ -445,7 +455,9 @@ function createBaseDeleteUserRequest(): DeleteUserRequest {
   return {};
 }
 
-export const DeleteUserRequest: MessageFns<DeleteUserRequest> = {
+export const DeleteUserRequest: MessageFns<DeleteUserRequest, "roshan.user.DeleteUserRequest"> = {
+  $type: "roshan.user.DeleteUserRequest" as const,
+
   encode(_: DeleteUserRequest, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
     return writer;
   },
@@ -488,7 +500,9 @@ function createBaseDeleteUserResponse(): DeleteUserResponse {
   return { user: undefined };
 }
 
-export const DeleteUserResponse: MessageFns<DeleteUserResponse> = {
+export const DeleteUserResponse: MessageFns<DeleteUserResponse, "roshan.user.DeleteUserResponse"> = {
+  $type: "roshan.user.DeleteUserResponse" as const,
+
   encode(message: DeleteUserResponse, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
     if (message.user !== undefined) {
       User.encode(message.user, writer.uint32(10).fork()).join();
@@ -546,7 +560,9 @@ function createBaseGetUserRequest(): GetUserRequest {
   return {};
 }
 
-export const GetUserRequest: MessageFns<GetUserRequest> = {
+export const GetUserRequest: MessageFns<GetUserRequest, "roshan.user.GetUserRequest"> = {
+  $type: "roshan.user.GetUserRequest" as const,
+
   encode(_: GetUserRequest, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
     return writer;
   },
@@ -589,7 +605,9 @@ function createBaseGetUserResponse(): GetUserResponse {
   return { user: undefined };
 }
 
-export const GetUserResponse: MessageFns<GetUserResponse> = {
+export const GetUserResponse: MessageFns<GetUserResponse, "roshan.user.GetUserResponse"> = {
+  $type: "roshan.user.GetUserResponse" as const,
+
   encode(message: GetUserResponse, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
     if (message.user !== undefined) {
       User.encode(message.user, writer.uint32(10).fork()).join();
@@ -643,53 +661,62 @@ export const GetUserResponse: MessageFns<GetUserResponse> = {
   },
 };
 
-export interface UserService {
-  CreateUser(request: CreateUserRequest): Promise<CreateUserResponse>;
-  UpdateUser(request: UpdateUserRequest): Promise<UpdateUserResponse>;
-  DeleteUser(request: DeleteUserRequest): Promise<DeleteUserResponse>;
-  GetUser(request: GetUserRequest): Promise<GetUserResponse>;
-}
-
-export const UserServiceServiceName = "roshan.user.UserService";
-export class UserServiceClientImpl implements UserService {
-  private readonly rpc: Rpc;
-  private readonly service: string;
-  constructor(rpc: Rpc, opts?: { service?: string }) {
-    this.service = opts?.service || UserServiceServiceName;
-    this.rpc = rpc;
-    this.CreateUser = this.CreateUser.bind(this);
-    this.UpdateUser = this.UpdateUser.bind(this);
-    this.DeleteUser = this.DeleteUser.bind(this);
-    this.GetUser = this.GetUser.bind(this);
-  }
-  CreateUser(request: CreateUserRequest): Promise<CreateUserResponse> {
-    const data = CreateUserRequest.encode(request).finish();
-    const promise = this.rpc.request(this.service, "CreateUser", data);
-    return promise.then((data) => CreateUserResponse.decode(new BinaryReader(data)));
-  }
-
-  UpdateUser(request: UpdateUserRequest): Promise<UpdateUserResponse> {
-    const data = UpdateUserRequest.encode(request).finish();
-    const promise = this.rpc.request(this.service, "UpdateUser", data);
-    return promise.then((data) => UpdateUserResponse.decode(new BinaryReader(data)));
-  }
-
-  DeleteUser(request: DeleteUserRequest): Promise<DeleteUserResponse> {
-    const data = DeleteUserRequest.encode(request).finish();
-    const promise = this.rpc.request(this.service, "DeleteUser", data);
-    return promise.then((data) => DeleteUserResponse.decode(new BinaryReader(data)));
-  }
-
-  GetUser(request: GetUserRequest): Promise<GetUserResponse> {
-    const data = GetUserRequest.encode(request).finish();
-    const promise = this.rpc.request(this.service, "GetUser", data);
-    return promise.then((data) => GetUserResponse.decode(new BinaryReader(data)));
-  }
-}
-
-interface Rpc {
-  request(service: string, method: string, data: Uint8Array): Promise<Uint8Array>;
-}
+export type UserServiceDefinition = typeof UserServiceDefinition;
+export const UserServiceDefinition = {
+  name: "UserService",
+  fullName: "roshan.user.UserService",
+  methods: {
+    createUser: {
+      name: "CreateUser",
+      requestType: CreateUserRequest,
+      requestStream: false,
+      responseType: CreateUserResponse,
+      responseStream: false,
+      options: {
+        _unknownFields: {
+          400000: [new Uint8Array([0])],
+          578365826: [new Uint8Array([17, 58, 1, 42, 34, 12, 47, 97, 112, 105, 47, 118, 49, 47, 117, 115, 101, 114])],
+        },
+      },
+    },
+    updateUser: {
+      name: "UpdateUser",
+      requestType: UpdateUserRequest,
+      requestStream: false,
+      responseType: UpdateUserResponse,
+      responseStream: false,
+      options: {
+        _unknownFields: {
+          578365826: [new Uint8Array([17, 58, 1, 42, 26, 12, 47, 97, 112, 105, 47, 118, 49, 47, 117, 115, 101, 114])],
+        },
+      },
+    },
+    deleteUser: {
+      name: "DeleteUser",
+      requestType: DeleteUserRequest,
+      requestStream: false,
+      responseType: DeleteUserResponse,
+      responseStream: false,
+      options: {
+        _unknownFields: {
+          578365826: [new Uint8Array([14, 42, 12, 47, 97, 112, 105, 47, 118, 49, 47, 117, 115, 101, 114])],
+        },
+      },
+    },
+    getUser: {
+      name: "GetUser",
+      requestType: GetUserRequest,
+      requestStream: false,
+      responseType: GetUserResponse,
+      responseStream: false,
+      options: {
+        _unknownFields: {
+          578365826: [new Uint8Array([14, 18, 12, 47, 97, 112, 105, 47, 118, 49, 47, 117, 115, 101, 114])],
+        },
+      },
+    },
+  },
+} as const;
 
 type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
 
@@ -707,7 +734,8 @@ function isSet(value: any): boolean {
   return value !== null && value !== undefined;
 }
 
-export interface MessageFns<T> {
+export interface MessageFns<T, V extends string> {
+  readonly $type: V;
   encode(message: T, writer?: BinaryWriter): BinaryWriter;
   decode(input: BinaryReader | Uint8Array, length?: number): T;
   fromJSON(object: any): T;

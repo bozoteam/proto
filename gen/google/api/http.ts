@@ -375,7 +375,9 @@ function createBaseHttp(): Http {
   return { rules: [], fully_decode_reserved_expansion: false };
 }
 
-export const Http: MessageFns<Http> = {
+export const Http: MessageFns<Http, "google.api.Http"> = {
+  $type: "google.api.Http" as const,
+
   encode(message: Http, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
     for (const v of message.rules) {
       HttpRule.encode(v!, writer.uint32(10).fork()).join();
@@ -464,7 +466,9 @@ function createBaseHttpRule(): HttpRule {
   };
 }
 
-export const HttpRule: MessageFns<HttpRule> = {
+export const HttpRule: MessageFns<HttpRule, "google.api.HttpRule"> = {
+  $type: "google.api.HttpRule" as const,
+
   encode(message: HttpRule, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
     if (message.selector !== "") {
       writer.uint32(10).string(message.selector);
@@ -672,7 +676,9 @@ function createBaseCustomHttpPattern(): CustomHttpPattern {
   return { kind: "", path: "" };
 }
 
-export const CustomHttpPattern: MessageFns<CustomHttpPattern> = {
+export const CustomHttpPattern: MessageFns<CustomHttpPattern, "google.api.CustomHttpPattern"> = {
+  $type: "google.api.CustomHttpPattern" as const,
+
   encode(message: CustomHttpPattern, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
     if (message.kind !== "") {
       writer.uint32(10).string(message.kind);
@@ -760,7 +766,8 @@ function isSet(value: any): boolean {
   return value !== null && value !== undefined;
 }
 
-export interface MessageFns<T> {
+export interface MessageFns<T, V extends string> {
+  readonly $type: V;
   encode(message: T, writer?: BinaryWriter): BinaryWriter;
   decode(input: BinaryReader | Uint8Array, length?: number): T;
   fromJSON(object: any): T;

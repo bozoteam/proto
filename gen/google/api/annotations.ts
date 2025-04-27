@@ -5,5 +5,39 @@
 // source: google/api/annotations.proto
 
 /* eslint-disable */
+import { BinaryReader, BinaryWriter } from "@bufbuild/protobuf/wire";
+import { HttpRule } from "./http";
 
 export const protobufPackage = "google.api";
+
+export const http: Extension<HttpRule | undefined> = {
+  number: 72295728,
+  tag: 578365826,
+  repeated: false,
+  packed: false,
+  encode: (value: HttpRule | undefined): Uint8Array[] => {
+    const encoded: Uint8Array[] = [];
+    const writer = new BinaryWriter();
+    HttpRule.encode(value, writer.fork()).join();
+    encoded.push(writer.finish());
+    return encoded;
+  },
+  decode: (tag: number, input: Uint8Array[]): HttpRule | undefined => {
+    const reader = new BinaryReader(input[input.length - 1] ?? fail());
+    return HttpRule.decode(reader, reader.uint32());
+  },
+};
+
+export interface Extension<T> {
+  number: number;
+  tag: number;
+  singularTag?: number;
+  encode?: (message: T) => Uint8Array[];
+  decode?: (tag: number, input: Uint8Array[]) => T;
+  repeated: boolean;
+  packed: boolean;
+}
+
+function fail(message?: string): never {
+  throw new globalThis.Error(message ?? "Failed");
+}

@@ -16,5 +16,4 @@ plugins:
     strategy: all
     local: ../node_modules/ts-proto/protoc-gen-ts_proto
     opt:
-      # - ts_proto_opt=snakeToCamel=
-      - ts_proto_opt=esModuleInterop=true,snakeToCamel=false
+      - ts_proto_opt=esModuleInterop=true,snakeToCamel=false,outputExtensions=true,env=browser,outputTypeAnnotations=static-only,outputServices=generic-definitions

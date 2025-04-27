@@ -37,7 +37,9 @@ function createBaseAuthenticateRequest(): AuthenticateRequest {
   return { email: "", password: "" };
 }
 
-export const AuthenticateRequest: MessageFns<AuthenticateRequest> = {
+export const AuthenticateRequest: MessageFns<AuthenticateRequest, "roshan.auth.AuthenticateRequest"> = {
+  $type: "roshan.auth.AuthenticateRequest" as const,
+
   encode(message: AuthenticateRequest, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
     if (message.email !== "") {
       writer.uint32(10).string(message.email);
@@ -113,7 +115,9 @@ function createBaseAuthenticateResponse(): AuthenticateResponse {
   return { access_token: "", refresh_token: "", token_type: "", expires_in: 0, refresh_expires_in: 0 };
 }
 
-export const AuthenticateResponse: MessageFns<AuthenticateResponse> = {
+export const AuthenticateResponse: MessageFns<AuthenticateResponse, "roshan.auth.AuthenticateResponse"> = {
+  $type: "roshan.auth.AuthenticateResponse" as const,
+
   encode(message: AuthenticateResponse, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
     if (message.access_token !== "") {
       writer.uint32(10).string(message.access_token);
@@ -237,7 +241,9 @@ function createBaseRefreshTokenRequest(): RefreshTokenRequest {
   return { refresh_token: undefined };
 }
 
-export const RefreshTokenRequest: MessageFns<RefreshTokenRequest> = {
+export const RefreshTokenRequest: MessageFns<RefreshTokenRequest, "roshan.auth.RefreshTokenRequest"> = {
+  $type: "roshan.auth.RefreshTokenRequest" as const,
+
   encode(message: RefreshTokenRequest, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
     if (message.refresh_token !== undefined) {
       writer.uint32(10).string(message.refresh_token);
@@ -295,7 +301,9 @@ function createBaseLogoutResponse(): LogoutResponse {
   return {};
 }
 
-export const LogoutResponse: MessageFns<LogoutResponse> = {
+export const LogoutResponse: MessageFns<LogoutResponse, "roshan.auth.LogoutResponse"> = {
+  $type: "roshan.auth.LogoutResponse" as const,
+
   encode(_: LogoutResponse, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
     return writer;
   },
@@ -338,7 +346,9 @@ function createBaseLogoutRequest(): LogoutRequest {
   return {};
 }
 
-export const LogoutRequest: MessageFns<LogoutRequest> = {
+export const LogoutRequest: MessageFns<LogoutRequest, "roshan.auth.LogoutRequest"> = {
+  $type: "roshan.auth.LogoutRequest" as const,
+
   encode(_: LogoutRequest, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
     return writer;
   },
@@ -377,45 +387,105 @@ export const LogoutRequest: MessageFns<LogoutRequest> = {
   },
 };
 
-export interface AuthService {
-  Authenticate(request: AuthenticateRequest): Promise<AuthenticateResponse>;
-  RefreshToken(request: RefreshTokenRequest): Promise<AuthenticateResponse>;
-  Logout(request: LogoutRequest): Promise<LogoutResponse>;
-}
-
-export const AuthServiceServiceName = "roshan.auth.AuthService";
-export class AuthServiceClientImpl implements AuthService {
-  private readonly rpc: Rpc;
-  private readonly service: string;
-  constructor(rpc: Rpc, opts?: { service?: string }) {
-    this.service = opts?.service || AuthServiceServiceName;
-    this.rpc = rpc;
-    this.Authenticate = this.Authenticate.bind(this);
-    this.RefreshToken = this.RefreshToken.bind(this);
-    this.Logout = this.Logout.bind(this);
-  }
-  Authenticate(request: AuthenticateRequest): Promise<AuthenticateResponse> {
-    const data = AuthenticateRequest.encode(request).finish();
-    const promise = this.rpc.request(this.service, "Authenticate", data);
-    return promise.then((data) => AuthenticateResponse.decode(new BinaryReader(data)));
-  }
-
-  RefreshToken(request: RefreshTokenRequest): Promise<AuthenticateResponse> {
-    const data = RefreshTokenRequest.encode(request).finish();
-    const promise = this.rpc.request(this.service, "RefreshToken", data);
-    return promise.then((data) => AuthenticateResponse.decode(new BinaryReader(data)));
-  }
-
-  Logout(request: LogoutRequest): Promise<LogoutResponse> {
-    const data = LogoutRequest.encode(request).finish();
-    const promise = this.rpc.request(this.service, "Logout", data);
-    return promise.then((data) => LogoutResponse.decode(new BinaryReader(data)));
-  }
-}
-
-interface Rpc {
-  request(service: string, method: string, data: Uint8Array): Promise<Uint8Array>;
-}
+export type AuthServiceDefinition = typeof AuthServiceDefinition;
+export const AuthServiceDefinition = {
+  name: "AuthService",
+  fullName: "roshan.auth.AuthService",
+  methods: {
+    authenticate: {
+      name: "Authenticate",
+      requestType: AuthenticateRequest,
+      requestStream: false,
+      responseType: AuthenticateResponse,
+      responseStream: false,
+      options: {
+        _unknownFields: {
+          400000: [new Uint8Array([0])],
+          578365826: [new Uint8Array([17, 58, 1, 42, 34, 12, 47, 97, 112, 105, 47, 118, 49, 47, 97, 117, 116, 104])],
+        },
+      },
+    },
+    refreshToken: {
+      name: "RefreshToken",
+      requestType: RefreshTokenRequest,
+      requestStream: false,
+      responseType: AuthenticateResponse,
+      responseStream: false,
+      options: {
+        _unknownFields: {
+          400000: [new Uint8Array([0])],
+          578365826: [
+            new Uint8Array([
+              25,
+              58,
+              1,
+              42,
+              34,
+              20,
+              47,
+              97,
+              112,
+              105,
+              47,
+              118,
+              49,
+              47,
+              97,
+              117,
+              116,
+              104,
+              47,
+              114,
+              101,
+              102,
+              114,
+              101,
+              115,
+              104,
+            ]),
+          ],
+        },
+      },
+    },
+    logout: {
+      name: "Logout",
+      requestType: LogoutRequest,
+      requestStream: false,
+      responseType: LogoutResponse,
+      responseStream: false,
+      options: {
+        _unknownFields: {
+          578365826: [
+            new Uint8Array([
+              21,
+              34,
+              19,
+              47,
+              97,
+              112,
+              105,
+              47,
+              118,
+              49,
+              47,
+              97,
+              117,
+              116,
+              104,
+              47,
+              108,
+              111,
+              103,
+              111,
+              117,
+              116,
+            ]),
+          ],
+        },
+      },
+    },
+  },
+} as const;
 
 type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
 
@@ -444,7 +514,8 @@ function isSet(value: any): boolean {
   return value !== null && value !== undefined;
 }
 
-export interface MessageFns<T> {
+export interface MessageFns<T, V extends string> {
+  readonly $type: V;
   encode(message: T, writer?: BinaryWriter): BinaryWriter;
   decode(input: BinaryReader | Uint8Array, length?: number): T;
   fromJSON(object: any): T;

@@ -52,7 +52,9 @@ function createBaseRoom(): Room {
   return { id: "", creator_id: "", name: "", users: [] };
 }
 
-export const Room: MessageFns<Room> = {
+export const Room: MessageFns<Room, "roshan.chat.Room"> = {
+  $type: "roshan.chat.Room" as const,
+
   encode(message: Room, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
     if (message.id !== "") {
       writer.uint32(10).string(message.id);
@@ -160,7 +162,9 @@ function createBaseSendMessageRequest(): SendMessageRequest {
   return { content: "", room_id: "" };
 }
 
-export const SendMessageRequest: MessageFns<SendMessageRequest> = {
+export const SendMessageRequest: MessageFns<SendMessageRequest, "roshan.chat.SendMessageRequest"> = {
+  $type: "roshan.chat.SendMessageRequest" as const,
+
   encode(message: SendMessageRequest, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
     if (message.content !== "") {
       writer.uint32(10).string(message.content);
@@ -236,7 +240,9 @@ function createBaseSendMessageResponse(): SendMessageResponse {
   return {};
 }
 
-export const SendMessageResponse: MessageFns<SendMessageResponse> = {
+export const SendMessageResponse: MessageFns<SendMessageResponse, "roshan.chat.SendMessageResponse"> = {
+  $type: "roshan.chat.SendMessageResponse" as const,
+
   encode(_: SendMessageResponse, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
     return writer;
   },
@@ -279,7 +285,9 @@ function createBaseCreateRoomRequest(): CreateRoomRequest {
   return { name: "" };
 }
 
-export const CreateRoomRequest: MessageFns<CreateRoomRequest> = {
+export const CreateRoomRequest: MessageFns<CreateRoomRequest, "roshan.chat.CreateRoomRequest"> = {
+  $type: "roshan.chat.CreateRoomRequest" as const,
+
   encode(message: CreateRoomRequest, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
     if (message.name !== "") {
       writer.uint32(10).string(message.name);
@@ -337,7 +345,9 @@ function createBaseCreateRoomResponse(): CreateRoomResponse {
   return { room: undefined };
 }
 
-export const CreateRoomResponse: MessageFns<CreateRoomResponse> = {
+export const CreateRoomResponse: MessageFns<CreateRoomResponse, "roshan.chat.CreateRoomResponse"> = {
+  $type: "roshan.chat.CreateRoomResponse" as const,
+
   encode(message: CreateRoomResponse, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
     if (message.room !== undefined) {
       Room.encode(message.room, writer.uint32(10).fork()).join();
@@ -395,7 +405,9 @@ function createBaseListRoomsRequest(): ListRoomsRequest {
   return {};
 }
 
-export const ListRoomsRequest: MessageFns<ListRoomsRequest> = {
+export const ListRoomsRequest: MessageFns<ListRoomsRequest, "roshan.chat.ListRoomsRequest"> = {
+  $type: "roshan.chat.ListRoomsRequest" as const,
+
   encode(_: ListRoomsRequest, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
     return writer;
   },
@@ -438,7 +450,9 @@ function createBaseListRoomsResponse(): ListRoomsResponse {
   return { rooms: [] };
 }
 
-export const ListRoomsResponse: MessageFns<ListRoomsResponse> = {
+export const ListRoomsResponse: MessageFns<ListRoomsResponse, "roshan.chat.ListRoomsResponse"> = {
+  $type: "roshan.chat.ListRoomsResponse" as const,
+
   encode(message: ListRoomsResponse, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
     for (const v of message.rooms) {
       Room.encode(v!, writer.uint32(10).fork()).join();
@@ -496,7 +510,9 @@ function createBaseDeleteRoomRequest(): DeleteRoomRequest {
   return { id: "" };
 }
 
-export const DeleteRoomRequest: MessageFns<DeleteRoomRequest> = {
+export const DeleteRoomRequest: MessageFns<DeleteRoomRequest, "roshan.chat.DeleteRoomRequest"> = {
+  $type: "roshan.chat.DeleteRoomRequest" as const,
+
   encode(message: DeleteRoomRequest, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
     if (message.id !== "") {
       writer.uint32(10).string(message.id);
@@ -554,7 +570,9 @@ function createBaseDeleteRoomResponse(): DeleteRoomResponse {
   return { room: undefined };
 }
 
-export const DeleteRoomResponse: MessageFns<DeleteRoomResponse> = {
+export const DeleteRoomResponse: MessageFns<DeleteRoomResponse, "roshan.chat.DeleteRoomResponse"> = {
+  $type: "roshan.chat.DeleteRoomResponse" as const,
+
   encode(message: DeleteRoomResponse, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
     if (message.room !== undefined) {
       Room.encode(message.room, writer.uint32(10).fork()).join();
@@ -608,53 +626,176 @@ export const DeleteRoomResponse: MessageFns<DeleteRoomResponse> = {
   },
 };
 
-export interface ChatService {
-  SendMessage(request: SendMessageRequest): Promise<SendMessageResponse>;
-  CreateRoom(request: CreateRoomRequest): Promise<CreateRoomResponse>;
-  ListRooms(request: ListRoomsRequest): Promise<ListRoomsResponse>;
-  DeleteRoom(request: DeleteRoomRequest): Promise<DeleteRoomResponse>;
-}
-
-export const ChatServiceServiceName = "roshan.chat.ChatService";
-export class ChatServiceClientImpl implements ChatService {
-  private readonly rpc: Rpc;
-  private readonly service: string;
-  constructor(rpc: Rpc, opts?: { service?: string }) {
-    this.service = opts?.service || ChatServiceServiceName;
-    this.rpc = rpc;
-    this.SendMessage = this.SendMessage.bind(this);
-    this.CreateRoom = this.CreateRoom.bind(this);
-    this.ListRooms = this.ListRooms.bind(this);
-    this.DeleteRoom = this.DeleteRoom.bind(this);
-  }
-  SendMessage(request: SendMessageRequest): Promise<SendMessageResponse> {
-    const data = SendMessageRequest.encode(request).finish();
-    const promise = this.rpc.request(this.service, "SendMessage", data);
-    return promise.then((data) => SendMessageResponse.decode(new BinaryReader(data)));
-  }
-
-  CreateRoom(request: CreateRoomRequest): Promise<CreateRoomResponse> {
-    const data = CreateRoomRequest.encode(request).finish();
-    const promise = this.rpc.request(this.service, "CreateRoom", data);
-    return promise.then((data) => CreateRoomResponse.decode(new BinaryReader(data)));
-  }
-
-  ListRooms(request: ListRoomsRequest): Promise<ListRoomsResponse> {
-    const data = ListRoomsRequest.encode(request).finish();
-    const promise = this.rpc.request(this.service, "ListRooms", data);
-    return promise.then((data) => ListRoomsResponse.decode(new BinaryReader(data)));
-  }
-
-  DeleteRoom(request: DeleteRoomRequest): Promise<DeleteRoomResponse> {
-    const data = DeleteRoomRequest.encode(request).finish();
-    const promise = this.rpc.request(this.service, "DeleteRoom", data);
-    return promise.then((data) => DeleteRoomResponse.decode(new BinaryReader(data)));
-  }
-}
-
-interface Rpc {
-  request(service: string, method: string, data: Uint8Array): Promise<Uint8Array>;
-}
+export type ChatServiceDefinition = typeof ChatServiceDefinition;
+export const ChatServiceDefinition = {
+  name: "ChatService",
+  fullName: "roshan.chat.ChatService",
+  methods: {
+    sendMessage: {
+      name: "SendMessage",
+      requestType: SendMessageRequest,
+      requestStream: false,
+      responseType: SendMessageResponse,
+      responseStream: false,
+      options: {
+        _unknownFields: {
+          578365826: [
+            new Uint8Array([
+              31,
+              58,
+              1,
+              42,
+              34,
+              26,
+              47,
+              97,
+              112,
+              105,
+              47,
+              118,
+              49,
+              47,
+              99,
+              104,
+              97,
+              116,
+              47,
+              114,
+              111,
+              111,
+              109,
+              115,
+              47,
+              109,
+              101,
+              115,
+              115,
+              97,
+              103,
+              101,
+            ]),
+          ],
+        },
+      },
+    },
+    createRoom: {
+      name: "CreateRoom",
+      requestType: CreateRoomRequest,
+      requestStream: false,
+      responseType: CreateRoomResponse,
+      responseStream: false,
+      options: {
+        _unknownFields: {
+          578365826: [
+            new Uint8Array([
+              23,
+              58,
+              1,
+              42,
+              34,
+              18,
+              47,
+              97,
+              112,
+              105,
+              47,
+              118,
+              49,
+              47,
+              99,
+              104,
+              97,
+              116,
+              47,
+              114,
+              111,
+              111,
+              109,
+              115,
+            ]),
+          ],
+        },
+      },
+    },
+    listRooms: {
+      name: "ListRooms",
+      requestType: ListRoomsRequest,
+      requestStream: false,
+      responseType: ListRoomsResponse,
+      responseStream: false,
+      options: {
+        _unknownFields: {
+          578365826: [
+            new Uint8Array([
+              20,
+              18,
+              18,
+              47,
+              97,
+              112,
+              105,
+              47,
+              118,
+              49,
+              47,
+              99,
+              104,
+              97,
+              116,
+              47,
+              114,
+              111,
+              111,
+              109,
+              115,
+            ]),
+          ],
+        },
+      },
+    },
+    deleteRoom: {
+      name: "DeleteRoom",
+      requestType: DeleteRoomRequest,
+      requestStream: false,
+      responseType: DeleteRoomResponse,
+      responseStream: false,
+      options: {
+        _unknownFields: {
+          578365826: [
+            new Uint8Array([
+              25,
+              42,
+              23,
+              47,
+              97,
+              112,
+              105,
+              47,
+              118,
+              49,
+              47,
+              99,
+              104,
+              97,
+              116,
+              47,
+              114,
+              111,
+              111,
+              109,
+              115,
+              47,
+              123,
+              105,
+              100,
+              125,
+            ]),
+          ],
+        },
+      },
+    },
+  },
+} as const;
 
 type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
 
@@ -672,7 +813,8 @@ function isSet(value: any): boolean {
   return value !== null && value !== undefined;
 }
 
-export interface MessageFns<T> {
+export interface MessageFns<T, V extends string> {
+  readonly $type: V;
   encode(message: T, writer?: BinaryWriter): BinaryWriter;
   decode(input: BinaryReader | Uint8Array, length?: number): T;
   fromJSON(object: any): T;

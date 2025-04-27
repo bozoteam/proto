@@ -2144,7 +2144,9 @@ function createBaseFileDescriptorSet(): FileDescriptorSet {
   return { file: [] };
 }
 
-export const FileDescriptorSet: MessageFns<FileDescriptorSet> = {
+export const FileDescriptorSet: MessageFns<FileDescriptorSet, "google.protobuf.FileDescriptorSet"> = {
+  $type: "google.protobuf.FileDescriptorSet" as const,
+
   encode(message: FileDescriptorSet, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
     for (const v of message.file) {
       FileDescriptorProto.encode(v!, writer.uint32(10).fork()).join();
@@ -2218,7 +2220,9 @@ function createBaseFileDescriptorProto(): FileDescriptorProto {
   };
 }
 
-export const FileDescriptorProto: MessageFns<FileDescriptorProto> = {
+export const FileDescriptorProto: MessageFns<FileDescriptorProto, "google.protobuf.FileDescriptorProto"> = {
+  $type: "google.protobuf.FileDescriptorProto" as const,
+
   encode(message: FileDescriptorProto, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
     if (message.name !== undefined && message.name !== "") {
       writer.uint32(10).string(message.name);
@@ -2523,7 +2527,9 @@ function createBaseDescriptorProto(): DescriptorProto {
   };
 }
 
-export const DescriptorProto: MessageFns<DescriptorProto> = {
+export const DescriptorProto: MessageFns<DescriptorProto, "google.protobuf.DescriptorProto"> = {
+  $type: "google.protobuf.DescriptorProto" as const,
+
   encode(message: DescriptorProto, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
     if (message.name !== undefined && message.name !== "") {
       writer.uint32(10).string(message.name);
@@ -2745,7 +2751,12 @@ function createBaseDescriptorProto_ExtensionRange(): DescriptorProto_ExtensionRa
   return { start: 0, end: 0, options: undefined };
 }
 
-export const DescriptorProto_ExtensionRange: MessageFns<DescriptorProto_ExtensionRange> = {
+export const DescriptorProto_ExtensionRange: MessageFns<
+  DescriptorProto_ExtensionRange,
+  "google.protobuf.DescriptorProto.ExtensionRange"
+> = {
+  $type: "google.protobuf.DescriptorProto.ExtensionRange" as const,
+
   encode(message: DescriptorProto_ExtensionRange, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
     if (message.start !== undefined && message.start !== 0) {
       writer.uint32(8).int32(message.start);
@@ -2841,7 +2852,12 @@ function createBaseDescriptorProto_ReservedRange(): DescriptorProto_ReservedRang
   return { start: 0, end: 0 };
 }
 
-export const DescriptorProto_ReservedRange: MessageFns<DescriptorProto_ReservedRange> = {
+export const DescriptorProto_ReservedRange: MessageFns<
+  DescriptorProto_ReservedRange,
+  "google.protobuf.DescriptorProto.ReservedRange"
+> = {
+  $type: "google.protobuf.DescriptorProto.ReservedRange" as const,
+
   encode(message: DescriptorProto_ReservedRange, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
     if (message.start !== undefined && message.start !== 0) {
       writer.uint32(8).int32(message.start);
@@ -2919,7 +2935,9 @@ function createBaseExtensionRangeOptions(): ExtensionRangeOptions {
   return { uninterpreted_option: [], declaration: [], features: undefined, verification: 1 };
 }
 
-export const ExtensionRangeOptions: MessageFns<ExtensionRangeOptions> = {
+export const ExtensionRangeOptions: MessageFns<ExtensionRangeOptions, "google.protobuf.ExtensionRangeOptions"> = {
+  $type: "google.protobuf.ExtensionRangeOptions" as const,
+
   encode(message: ExtensionRangeOptions, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
     for (const v of message.uninterpreted_option) {
       UninterpretedOption.encode(v!, writer.uint32(7994).fork()).join();
@@ -3035,7 +3053,12 @@ function createBaseExtensionRangeOptions_Declaration(): ExtensionRangeOptions_De
   return { number: 0, full_name: "", type: "", reserved: false, repeated: false };
 }
 
-export const ExtensionRangeOptions_Declaration: MessageFns<ExtensionRangeOptions_Declaration> = {
+export const ExtensionRangeOptions_Declaration: MessageFns<
+  ExtensionRangeOptions_Declaration,
+  "google.protobuf.ExtensionRangeOptions.Declaration"
+> = {
+  $type: "google.protobuf.ExtensionRangeOptions.Declaration" as const,
+
   encode(message: ExtensionRangeOptions_Declaration, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
     if (message.number !== undefined && message.number !== 0) {
       writer.uint32(8).int32(message.number);
@@ -3175,7 +3198,9 @@ function createBaseFieldDescriptorProto(): FieldDescriptorProto {
   };
 }
 
-export const FieldDescriptorProto: MessageFns<FieldDescriptorProto> = {
+export const FieldDescriptorProto: MessageFns<FieldDescriptorProto, "google.protobuf.FieldDescriptorProto"> = {
+  $type: "google.protobuf.FieldDescriptorProto" as const,
+
   encode(message: FieldDescriptorProto, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
     if (message.name !== undefined && message.name !== "") {
       writer.uint32(10).string(message.name);
@@ -3397,7 +3422,9 @@ function createBaseOneofDescriptorProto(): OneofDescriptorProto {
   return { name: "", options: undefined };
 }
 
-export const OneofDescriptorProto: MessageFns<OneofDescriptorProto> = {
+export const OneofDescriptorProto: MessageFns<OneofDescriptorProto, "google.protobuf.OneofDescriptorProto"> = {
+  $type: "google.protobuf.OneofDescriptorProto" as const,
+
   encode(message: OneofDescriptorProto, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
     if (message.name !== undefined && message.name !== "") {
       writer.uint32(10).string(message.name);
@@ -3475,7 +3502,9 @@ function createBaseEnumDescriptorProto(): EnumDescriptorProto {
   return { name: "", value: [], options: undefined, reserved_range: [], reserved_name: [] };
 }
 
-export const EnumDescriptorProto: MessageFns<EnumDescriptorProto> = {
+export const EnumDescriptorProto: MessageFns<EnumDescriptorProto, "google.protobuf.EnumDescriptorProto"> = {
+  $type: "google.protobuf.EnumDescriptorProto" as const,
+
   encode(message: EnumDescriptorProto, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
     if (message.name !== undefined && message.name !== "") {
       writer.uint32(10).string(message.name);
@@ -3608,7 +3637,12 @@ function createBaseEnumDescriptorProto_EnumReservedRange(): EnumDescriptorProto_
   return { start: 0, end: 0 };
 }
 
-export const EnumDescriptorProto_EnumReservedRange: MessageFns<EnumDescriptorProto_EnumReservedRange> = {
+export const EnumDescriptorProto_EnumReservedRange: MessageFns<
+  EnumDescriptorProto_EnumReservedRange,
+  "google.protobuf.EnumDescriptorProto.EnumReservedRange"
+> = {
+  $type: "google.protobuf.EnumDescriptorProto.EnumReservedRange" as const,
+
   encode(message: EnumDescriptorProto_EnumReservedRange, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
     if (message.start !== undefined && message.start !== 0) {
       writer.uint32(8).int32(message.start);
@@ -3688,7 +3722,12 @@ function createBaseEnumValueDescriptorProto(): EnumValueDescriptorProto {
   return { name: "", number: 0, options: undefined };
 }
 
-export const EnumValueDescriptorProto: MessageFns<EnumValueDescriptorProto> = {
+export const EnumValueDescriptorProto: MessageFns<
+  EnumValueDescriptorProto,
+  "google.protobuf.EnumValueDescriptorProto"
+> = {
+  $type: "google.protobuf.EnumValueDescriptorProto" as const,
+
   encode(message: EnumValueDescriptorProto, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
     if (message.name !== undefined && message.name !== "") {
       writer.uint32(10).string(message.name);
@@ -3782,7 +3821,9 @@ function createBaseServiceDescriptorProto(): ServiceDescriptorProto {
   return { name: "", method: [], options: undefined };
 }
 
-export const ServiceDescriptorProto: MessageFns<ServiceDescriptorProto> = {
+export const ServiceDescriptorProto: MessageFns<ServiceDescriptorProto, "google.protobuf.ServiceDescriptorProto"> = {
+  $type: "google.protobuf.ServiceDescriptorProto" as const,
+
   encode(message: ServiceDescriptorProto, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
     if (message.name !== undefined && message.name !== "") {
       writer.uint32(10).string(message.name);
@@ -3885,7 +3926,9 @@ function createBaseMethodDescriptorProto(): MethodDescriptorProto {
   };
 }
 
-export const MethodDescriptorProto: MessageFns<MethodDescriptorProto> = {
+export const MethodDescriptorProto: MessageFns<MethodDescriptorProto, "google.protobuf.MethodDescriptorProto"> = {
+  $type: "google.protobuf.MethodDescriptorProto" as const,
+
   encode(message: MethodDescriptorProto, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
     if (message.name !== undefined && message.name !== "") {
       writer.uint32(10).string(message.name);
@@ -4049,7 +4092,9 @@ function createBaseFileOptions(): FileOptions {
   };
 }
 
-export const FileOptions: MessageFns<FileOptions> = {
+export const FileOptions: MessageFns<FileOptions, "google.protobuf.FileOptions"> = {
+  $type: "google.protobuf.FileOptions" as const,
+
   encode(message: FileOptions, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
     if (message.java_package !== undefined && message.java_package !== "") {
       writer.uint32(10).string(message.java_package);
@@ -4449,7 +4494,9 @@ function createBaseMessageOptions(): MessageOptions {
   };
 }
 
-export const MessageOptions: MessageFns<MessageOptions> = {
+export const MessageOptions: MessageFns<MessageOptions, "google.protobuf.MessageOptions"> = {
+  $type: "google.protobuf.MessageOptions" as const,
+
   encode(message: MessageOptions, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
     if (message.message_set_wire_format !== undefined && message.message_set_wire_format !== false) {
       writer.uint32(8).bool(message.message_set_wire_format);
@@ -4636,7 +4683,9 @@ function createBaseFieldOptions(): FieldOptions {
   };
 }
 
-export const FieldOptions: MessageFns<FieldOptions> = {
+export const FieldOptions: MessageFns<FieldOptions, "google.protobuf.FieldOptions"> = {
+  $type: "google.protobuf.FieldOptions" as const,
+
   encode(message: FieldOptions, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
     if (message.ctype !== undefined && message.ctype !== 0) {
       writer.uint32(8).int32(message.ctype);
@@ -4928,7 +4977,12 @@ function createBaseFieldOptions_EditionDefault(): FieldOptions_EditionDefault {
   return { edition: 0, value: "" };
 }
 
-export const FieldOptions_EditionDefault: MessageFns<FieldOptions_EditionDefault> = {
+export const FieldOptions_EditionDefault: MessageFns<
+  FieldOptions_EditionDefault,
+  "google.protobuf.FieldOptions.EditionDefault"
+> = {
+  $type: "google.protobuf.FieldOptions.EditionDefault" as const,
+
   encode(message: FieldOptions_EditionDefault, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
     if (message.edition !== undefined && message.edition !== 0) {
       writer.uint32(24).int32(message.edition);
@@ -5004,7 +5058,12 @@ function createBaseFieldOptions_FeatureSupport(): FieldOptions_FeatureSupport {
   return { edition_introduced: 0, edition_deprecated: 0, deprecation_warning: "", edition_removed: 0 };
 }
 
-export const FieldOptions_FeatureSupport: MessageFns<FieldOptions_FeatureSupport> = {
+export const FieldOptions_FeatureSupport: MessageFns<
+  FieldOptions_FeatureSupport,
+  "google.protobuf.FieldOptions.FeatureSupport"
+> = {
+  $type: "google.protobuf.FieldOptions.FeatureSupport" as const,
+
   encode(message: FieldOptions_FeatureSupport, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
     if (message.edition_introduced !== undefined && message.edition_introduced !== 0) {
       writer.uint32(8).int32(message.edition_introduced);
@@ -5112,7 +5171,9 @@ function createBaseOneofOptions(): OneofOptions {
   return { features: undefined, uninterpreted_option: [] };
 }
 
-export const OneofOptions: MessageFns<OneofOptions> = {
+export const OneofOptions: MessageFns<OneofOptions, "google.protobuf.OneofOptions"> = {
+  $type: "google.protobuf.OneofOptions" as const,
+
   encode(message: OneofOptions, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
     if (message.features !== undefined) {
       FeatureSet.encode(message.features, writer.uint32(10).fork()).join();
@@ -5198,7 +5259,9 @@ function createBaseEnumOptions(): EnumOptions {
   };
 }
 
-export const EnumOptions: MessageFns<EnumOptions> = {
+export const EnumOptions: MessageFns<EnumOptions, "google.protobuf.EnumOptions"> = {
+  $type: "google.protobuf.EnumOptions" as const,
+
   encode(message: EnumOptions, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
     if (message.allow_alias !== undefined && message.allow_alias !== false) {
       writer.uint32(16).bool(message.allow_alias);
@@ -5340,7 +5403,9 @@ function createBaseEnumValueOptions(): EnumValueOptions {
   };
 }
 
-export const EnumValueOptions: MessageFns<EnumValueOptions> = {
+export const EnumValueOptions: MessageFns<EnumValueOptions, "google.protobuf.EnumValueOptions"> = {
+  $type: "google.protobuf.EnumValueOptions" as const,
+
   encode(message: EnumValueOptions, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
     if (message.deprecated !== undefined && message.deprecated !== false) {
       writer.uint32(8).bool(message.deprecated);
@@ -5472,7 +5537,9 @@ function createBaseServiceOptions(): ServiceOptions {
   return { features: undefined, deprecated: false, uninterpreted_option: [] };
 }
 
-export const ServiceOptions: MessageFns<ServiceOptions> = {
+export const ServiceOptions: MessageFns<ServiceOptions, "google.protobuf.ServiceOptions"> = {
+  $type: "google.protobuf.ServiceOptions" as const,
+
   encode(message: ServiceOptions, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
     if (message.features !== undefined) {
       FeatureSet.encode(message.features, writer.uint32(274).fork()).join();
@@ -5568,7 +5635,9 @@ function createBaseMethodOptions(): MethodOptions {
   return { deprecated: false, idempotency_level: 0, features: undefined, uninterpreted_option: [] };
 }
 
-export const MethodOptions: MessageFns<MethodOptions> = {
+export const MethodOptions: MessageFns<MethodOptions, "google.protobuf.MethodOptions"> = {
+  $type: "google.protobuf.MethodOptions" as const,
+
   encode(message: MethodOptions, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
     if (message.deprecated !== undefined && message.deprecated !== false) {
       writer.uint32(264).bool(message.deprecated);
@@ -5690,7 +5759,9 @@ function createBaseUninterpretedOption(): UninterpretedOption {
   };
 }
 
-export const UninterpretedOption: MessageFns<UninterpretedOption> = {
+export const UninterpretedOption: MessageFns<UninterpretedOption, "google.protobuf.UninterpretedOption"> = {
+  $type: "google.protobuf.UninterpretedOption" as const,
+
   encode(message: UninterpretedOption, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
     for (const v of message.name) {
       UninterpretedOption_NamePart.encode(v!, writer.uint32(18).fork()).join();
@@ -5848,7 +5919,12 @@ function createBaseUninterpretedOption_NamePart(): UninterpretedOption_NamePart 
   return { name_part: "", is_extension: false };
 }
 
-export const UninterpretedOption_NamePart: MessageFns<UninterpretedOption_NamePart> = {
+export const UninterpretedOption_NamePart: MessageFns<
+  UninterpretedOption_NamePart,
+  "google.protobuf.UninterpretedOption.NamePart"
+> = {
+  $type: "google.protobuf.UninterpretedOption.NamePart" as const,
+
   encode(message: UninterpretedOption_NamePart, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
     if (message.name_part !== "") {
       writer.uint32(10).string(message.name_part);
@@ -5932,7 +6008,9 @@ function createBaseFeatureSet(): FeatureSet {
   };
 }
 
-export const FeatureSet: MessageFns<FeatureSet> = {
+export const FeatureSet: MessageFns<FeatureSet, "google.protobuf.FeatureSet"> = {
+  $type: "google.protobuf.FeatureSet" as const,
+
   encode(message: FeatureSet, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
     if (message.field_presence !== undefined && message.field_presence !== 0) {
       writer.uint32(8).int32(message.field_presence);
@@ -6094,7 +6172,9 @@ function createBaseFeatureSetDefaults(): FeatureSetDefaults {
   return { defaults: [], minimum_edition: 0, maximum_edition: 0 };
 }
 
-export const FeatureSetDefaults: MessageFns<FeatureSetDefaults> = {
+export const FeatureSetDefaults: MessageFns<FeatureSetDefaults, "google.protobuf.FeatureSetDefaults"> = {
+  $type: "google.protobuf.FeatureSetDefaults" as const,
+
   encode(message: FeatureSetDefaults, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
     for (const v of message.defaults) {
       FeatureSetDefaults_FeatureSetEditionDefault.encode(v!, writer.uint32(10).fork()).join();
@@ -6188,7 +6268,12 @@ function createBaseFeatureSetDefaults_FeatureSetEditionDefault(): FeatureSetDefa
   return { edition: 0, overridable_features: undefined, fixed_features: undefined };
 }
 
-export const FeatureSetDefaults_FeatureSetEditionDefault: MessageFns<FeatureSetDefaults_FeatureSetEditionDefault> = {
+export const FeatureSetDefaults_FeatureSetEditionDefault: MessageFns<
+  FeatureSetDefaults_FeatureSetEditionDefault,
+  "google.protobuf.FeatureSetDefaults.FeatureSetEditionDefault"
+> = {
+  $type: "google.protobuf.FeatureSetDefaults.FeatureSetEditionDefault" as const,
+
   encode(
     message: FeatureSetDefaults_FeatureSetEditionDefault,
     writer: BinaryWriter = new BinaryWriter(),
@@ -6293,7 +6378,9 @@ function createBaseSourceCodeInfo(): SourceCodeInfo {
   return { location: [] };
 }
 
-export const SourceCodeInfo: MessageFns<SourceCodeInfo> = {
+export const SourceCodeInfo: MessageFns<SourceCodeInfo, "google.protobuf.SourceCodeInfo"> = {
+  $type: "google.protobuf.SourceCodeInfo" as const,
+
   encode(message: SourceCodeInfo, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
     for (const v of message.location) {
       SourceCodeInfo_Location.encode(v!, writer.uint32(10).fork()).join();
@@ -6355,7 +6442,9 @@ function createBaseSourceCodeInfo_Location(): SourceCodeInfo_Location {
   return { path: [], span: [], leading_comments: "", trailing_comments: "", leading_detached_comments: [] };
 }
 
-export const SourceCodeInfo_Location: MessageFns<SourceCodeInfo_Location> = {
+export const SourceCodeInfo_Location: MessageFns<SourceCodeInfo_Location, "google.protobuf.SourceCodeInfo.Location"> = {
+  $type: "google.protobuf.SourceCodeInfo.Location" as const,
+
   encode(message: SourceCodeInfo_Location, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
     writer.uint32(10).fork();
     for (const v of message.path) {
@@ -6505,7 +6594,9 @@ function createBaseGeneratedCodeInfo(): GeneratedCodeInfo {
   return { annotation: [] };
 }
 
-export const GeneratedCodeInfo: MessageFns<GeneratedCodeInfo> = {
+export const GeneratedCodeInfo: MessageFns<GeneratedCodeInfo, "google.protobuf.GeneratedCodeInfo"> = {
+  $type: "google.protobuf.GeneratedCodeInfo" as const,
+
   encode(message: GeneratedCodeInfo, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
     for (const v of message.annotation) {
       GeneratedCodeInfo_Annotation.encode(v!, writer.uint32(10).fork()).join();
@@ -6567,7 +6658,12 @@ function createBaseGeneratedCodeInfo_Annotation(): GeneratedCodeInfo_Annotation 
   return { path: [], source_file: "", begin: 0, end: 0, semantic: 0 };
 }
 
-export const GeneratedCodeInfo_Annotation: MessageFns<GeneratedCodeInfo_Annotation> = {
+export const GeneratedCodeInfo_Annotation: MessageFns<
+  GeneratedCodeInfo_Annotation,
+  "google.protobuf.GeneratedCodeInfo.Annotation"
+> = {
+  $type: "google.protobuf.GeneratedCodeInfo.Annotation" as const,
+
   encode(message: GeneratedCodeInfo_Annotation, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
     writer.uint32(10).fork();
     for (const v of message.path) {
@@ -6700,28 +6796,20 @@ export const GeneratedCodeInfo_Annotation: MessageFns<GeneratedCodeInfo_Annotati
 };
 
 function bytesFromBase64(b64: string): Uint8Array {
-  if ((globalThis as any).Buffer) {
-    return Uint8Array.from(globalThis.Buffer.from(b64, "base64"));
-  } else {
-    const bin = globalThis.atob(b64);
-    const arr = new Uint8Array(bin.length);
-    for (let i = 0; i < bin.length; ++i) {
-      arr[i] = bin.charCodeAt(i);
-    }
-    return arr;
+  const bin = globalThis.atob(b64);
+  const arr = new Uint8Array(bin.length);
+  for (let i = 0; i < bin.length; ++i) {
+    arr[i] = bin.charCodeAt(i);
   }
+  return arr;
 }
 
 function base64FromBytes(arr: Uint8Array): string {
-  if ((globalThis as any).Buffer) {
-    return globalThis.Buffer.from(arr).toString("base64");
-  } else {
-    const bin: string[] = [];
-    arr.forEach((byte) => {
-      bin.push(globalThis.String.fromCharCode(byte));
-    });
-    return globalThis.btoa(bin.join(""));
-  }
+  const bin: string[] = [];
+  arr.forEach((byte) => {
+    bin.push(globalThis.String.fromCharCode(byte));
+  });
+  return globalThis.btoa(bin.join(""));
 }
 
 type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
@@ -6751,7 +6839,8 @@ function isSet(value: any): boolean {
   return value !== null && value !== undefined;
 }
 
-export interface MessageFns<T> {
+export interface MessageFns<T, V extends string> {
+  readonly $type: V;
   encode(message: T, writer?: BinaryWriter): BinaryWriter;
   decode(input: BinaryReader | Uint8Array, length?: number): T;
   fromJSON(object: any): T;
