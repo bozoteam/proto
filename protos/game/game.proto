@@ -1,0 +1,72 @@
+syntax = "proto3";
+
+package roshan.games;
+
+import "common/common.proto";
+import "google/api/annotations.proto";
+// import "options/authorization_required.proto";
+import "user/user.proto";
+
+option go_package = "github.com/bozoteam/roshan/adapter/grpc/gen/games/game;gen";
+
+enum GameKind {
+  GAME_KIND_UNSPECIFIED = 0;
+  GAME_KIND_TICTACTOE = 1;
+}
+
+enum Team {
+  TEAM_UNSPECIFIED = 0;
+  TEAM_SPECTATOR = 1;
+  TEAM_1 = 2;
+  TEAM_2 = 3;
+}
+
+message CreateGameRoomRequest {
+  string name = 1;
+  GameKind kind = 2;
+}
+
+message CreateGameRoomResponse {
+  common.Room room = 1;
+}
+
+message ListGameRoomsRequest {}
+
+message ListGameRoomsResponse {
+  repeated common.Room rooms = 1;
+}
+
+message DeleteGameRoomRequest {
+  string id = 1;
+}
+
+message DeleteGameRoomResponse {
+  common.Room room = 1;
+}
+
+message StartGameRequest {
+  string id = 1;
+}
+
+message StartGameResponse {}
+
+service GameService {
+  rpc StartGame(StartGameRequest) returns (StartGameResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/game/rooms/{id}"
+      body: "*"
+    };
+  }
+  rpc CreateRoom(CreateGameRoomRequest) returns (CreateGameRoomResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/game/rooms"
+      body: "*"
+    };
+  }
+  rpc ListRooms(ListGameRoomsRequest) returns (ListGameRoomsResponse) {
+    option (google.api.http) = {get: "/api/v1/game/rooms"};
+  }
+  rpc DeleteRoom(DeleteGameRoomRequest) returns (DeleteGameRoomResponse) {
+    option (google.api.http) = {delete: "/api/v1/game/rooms/{id}"};
+  }
+}

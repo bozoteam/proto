@@ -6,16 +6,9 @@
 
 /* eslint-disable */
 import { BinaryReader, BinaryWriter } from "@bufbuild/protobuf/wire";
-import { User } from "../user/user";
+import { Room } from "../common/common";
 
 export const protobufPackage = "roshan.chat";
-
-export interface Room {
-  id: string;
-  creator_id: string;
-  name: string;
-  users: User[];
-}
 
 export interface SendMessageRequest {
   content: string;
@@ -47,116 +40,6 @@ export interface DeleteRoomRequest {
 export interface DeleteRoomResponse {
   room: Room | undefined;
 }
-
-function createBaseRoom(): Room {
-  return { id: "", creator_id: "", name: "", users: [] };
-}
-
-export const Room: MessageFns<Room, "roshan.chat.Room"> = {
-  $type: "roshan.chat.Room" as const,
-
-  encode(message: Room, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
-    if (message.id !== "") {
-      writer.uint32(10).string(message.id);
-    }
-    if (message.creator_id !== "") {
-      writer.uint32(18).string(message.creator_id);
-    }
-    if (message.name !== "") {
-      writer.uint32(26).string(message.name);
-    }
-    for (const v of message.users) {
-      User.encode(v!, writer.uint32(34).fork()).join();
-    }
-    return writer;
-  },
-
-  decode(input: BinaryReader | Uint8Array, length?: number): Room {
-    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseRoom();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1: {
-          if (tag !== 10) {
-            break;
-          }
-
-          message.id = reader.string();
-          continue;
-        }
-        case 2: {
-          if (tag !== 18) {
-            break;
-          }
-
-          message.creator_id = reader.string();
-          continue;
-        }
-        case 3: {
-          if (tag !== 26) {
-            break;
-          }
-
-          message.name = reader.string();
-          continue;
-        }
-        case 4: {
-          if (tag !== 34) {
-            break;
-          }
-
-          message.users.push(User.decode(reader, reader.uint32()));
-          continue;
-        }
-      }
-      if ((tag & 7) === 4 || tag === 0) {
-        break;
-      }
-      reader.skip(tag & 7);
-    }
-    return message;
-  },
-
-  fromJSON(object: any): Room {
-    return {
-      id: isSet(object.id) ? globalThis.String(object.id) : "",
-      creator_id: isSet(object.creator_id) ? globalThis.String(object.creator_id) : "",
-      name: isSet(object.name) ? globalThis.String(object.name) : "",
-      users: globalThis.Array.isArray(object?.users) ? object.users.map((e: any) => User.fromJSON(e)) : [],
-    };
-  },
-
-  toJSON(message: Room): unknown {
-    const obj: any = {};
-    if (message.id !== "") {
-      obj.id = message.id;
-    }
-    if (message.creator_id !== "") {
-      obj.creator_id = message.creator_id;
-    }
-    if (message.name !== "") {
-      obj.name = message.name;
-    }
-    if (message.users?.length) {
-      obj.users = message.users.map((e) => User.toJSON(e));
-    }
-    return obj;
-  },
-
-  create<I extends Exact<DeepPartial<Room>, I>>(base?: I): Room {
-    return Room.fromPartial(base ?? ({} as any));
-  },
-  fromPartial<I extends Exact<DeepPartial<Room>, I>>(object: I): Room {
-    const message = createBaseRoom();
-    message.id = object.id ?? "";
-    message.creator_id = object.creator_id ?? "";
-    message.name = object.name ?? "";
-    message.users = object.users?.map((e) => User.fromPartial(e)) || [];
-    return message;
-  },
-};
 
 function createBaseSendMessageRequest(): SendMessageRequest {
   return { content: "", room_id: "" };

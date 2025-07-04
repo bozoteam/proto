@@ -1,12 +1,12 @@
 {
   "swagger": "2.0",
   "info": {
-    "title": "chat/chat.proto",
+    "title": "games/game.proto",
     "version": "version not set"
   },
   "tags": [
     {
-      "name": "ChatService"
+      "name": "GameService"
     }
   ],
   "consumes": [
@@ -16,14 +16,14 @@
     "application/json"
   ],
   "paths": {
-    "/api/v1/chat/rooms": {
+    "/api/v1/game/rooms": {
       "get": {
-        "operationId": "ChatService_ListRooms",
+        "operationId": "GameService_ListRooms",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/chatListRoomsResponse"
+              "$ref": "#/definitions/gamesListGameRoomsResponse"
             }
           },
           "default": {
@@ -34,16 +34,16 @@
           }
         },
         "tags": [
-          "ChatService"
+          "GameService"
         ]
       },
       "post": {
-        "operationId": "ChatService_CreateRoom",
+        "operationId": "GameService_CreateRoom",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/chatCreateRoomResponse"
+              "$ref": "#/definitions/gamesCreateGameRoomResponse"
             }
           },
           "default": {
@@ -59,55 +59,23 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/chatCreateRoomRequest"
+              "$ref": "#/definitions/gamesCreateGameRoomRequest"
             }
           }
         ],
         "tags": [
-          "ChatService"
+          "GameService"
         ]
       }
     },
-    "/api/v1/chat/rooms/message": {
-      "post": {
-        "operationId": "ChatService_SendMessage",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/chatSendMessageResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/chatSendMessageRequest"
-            }
-          }
-        ],
-        "tags": [
-          "ChatService"
-        ]
-      }
-    },
-    "/api/v1/chat/rooms/{id}": {
+    "/api/v1/game/rooms/{id}": {
       "delete": {
-        "operationId": "ChatService_DeleteRoom",
+        "operationId": "GameService_DeleteRoom",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/chatDeleteRoomResponse"
+              "$ref": "#/definitions/gamesDeleteGameRoomResponse"
             }
           },
           "default": {
@@ -126,60 +94,49 @@
           }
         ],
         "tags": [
-          "ChatService"
+          "GameService"
+        ]
+      },
+      "post": {
+        "operationId": "GameService_StartGame",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/gamesStartGameResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/GameServiceStartGameBody"
+            }
+          }
+        ],
+        "tags": [
+          "GameService"
         ]
       }
     }
   },
   "definitions": {
-    "chatCreateRoomRequest": {
-      "type": "object",
-      "properties": {
-        "name": {
-          "type": "string"
-        }
-      }
-    },
-    "chatCreateRoomResponse": {
-      "type": "object",
-      "properties": {
-        "room": {
-          "$ref": "#/definitions/commonRoom"
-        }
-      }
-    },
-    "chatDeleteRoomResponse": {
-      "type": "object",
-      "properties": {
-        "room": {
-          "$ref": "#/definitions/commonRoom"
-        }
-      }
-    },
-    "chatListRoomsResponse": {
-      "type": "object",
-      "properties": {
-        "rooms": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "$ref": "#/definitions/commonRoom"
-          }
-        }
-      }
-    },
-    "chatSendMessageRequest": {
-      "type": "object",
-      "properties": {
-        "content": {
-          "type": "string"
-        },
-        "roomId": {
-          "type": "string"
-        }
-      }
-    },
-    "chatSendMessageResponse": {
+    "GameServiceStartGameBody": {
       "type": "object"
     },
     "commonRoom": {
@@ -202,6 +159,56 @@
           }
         }
       }
+    },
+    "gamesCreateGameRoomRequest": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "kind": {
+          "$ref": "#/definitions/gamesGameKind"
+        }
+      }
+    },
+    "gamesCreateGameRoomResponse": {
+      "type": "object",
+      "properties": {
+        "room": {
+          "$ref": "#/definitions/commonRoom"
+        }
+      }
+    },
+    "gamesDeleteGameRoomResponse": {
+      "type": "object",
+      "properties": {
+        "room": {
+          "$ref": "#/definitions/commonRoom"
+        }
+      }
+    },
+    "gamesGameKind": {
+      "type": "string",
+      "enum": [
+        "GAME_KIND_UNSPECIFIED",
+        "GAME_KIND_TICTACTOE"
+      ],
+      "default": "GAME_KIND_UNSPECIFIED"
+    },
+    "gamesListGameRoomsResponse": {
+      "type": "object",
+      "properties": {
+        "rooms": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/commonRoom"
+          }
+        }
+      }
+    },
+    "gamesStartGameResponse": {
+      "type": "object"
     },
     "protobufAny": {
       "type": "object",

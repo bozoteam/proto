@@ -4,43 +4,12 @@
 
 import type { GenFile, GenMessage, GenService } from "@bufbuild/protobuf/codegenv1";
 import type { Message } from "@bufbuild/protobuf";
-import type { User } from "../user/user_pb";
+import type { Room } from "../common/common_pb";
 
 /**
  * Describes the file chat/chat.proto.
  */
 export declare const file_chat_chat: GenFile;
-
-/**
- * @generated from message roshan.chat.Room
- */
-export declare type Room = Message<"roshan.chat.Room"> & {
-  /**
-   * @generated from field: string id = 1;
-   */
-  id: string;
-
-  /**
-   * @generated from field: string creator_id = 2;
-   */
-  creatorId: string;
-
-  /**
-   * @generated from field: string name = 3;
-   */
-  name: string;
-
-  /**
-   * @generated from field: repeated roshan.user.User users = 4;
-   */
-  users: User[];
-};
-
-/**
- * Describes the message roshan.chat.Room.
- * Use `create(RoomSchema)` to create a new message.
- */
-export declare const RoomSchema: GenMessage<Room>;
 
 /**
  * @generated from message roshan.chat.SendMessageRequest
@@ -96,7 +65,7 @@ export declare const CreateRoomRequestSchema: GenMessage<CreateRoomRequest>;
  */
 export declare type CreateRoomResponse = Message<"roshan.chat.CreateRoomResponse"> & {
   /**
-   * @generated from field: roshan.chat.Room room = 1;
+   * @generated from field: roshan.common.Room room = 1;
    */
   room?: Room;
 };
@@ -124,7 +93,7 @@ export declare const ListRoomsRequestSchema: GenMessage<ListRoomsRequest>;
  */
 export declare type ListRoomsResponse = Message<"roshan.chat.ListRoomsResponse"> & {
   /**
-   * @generated from field: repeated roshan.chat.Room rooms = 1;
+   * @generated from field: repeated roshan.common.Room rooms = 1;
    */
   rooms: Room[];
 };
@@ -156,7 +125,7 @@ export declare const DeleteRoomRequestSchema: GenMessage<DeleteRoomRequest>;
  */
 export declare type DeleteRoomResponse = Message<"roshan.chat.DeleteRoomResponse"> & {
   /**
-   * @generated from field: roshan.chat.Room room = 1;
+   * @generated from field: roshan.common.Room room = 1;
    */
   room?: Room;
 };

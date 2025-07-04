@@ -3,6 +3,7 @@
 /* eslint-disable */
 
 import { fileDesc, messageDesc, serviceDesc } from "@bufbuild/protobuf/codegenv1";
+import { file_common_common } from "../common/common_pb";
 import { file_google_api_annotations } from "../google/api/annotations_pb";
 import { file_user_user } from "../user/user_pb";
 
@@ -10,70 +11,63 @@ import { file_user_user } from "../user/user_pb";
  * Describes the file chat/chat.proto.
  */
 export const file_chat_chat = /*@__PURE__*/
-  fileDesc("Cg9jaGF0L2NoYXQucHJvdG8SC3Jvc2hhbi5jaGF0IlYKBFJvb20SCgoCaWQYASABKAkSEgoKY3JlYXRvcl9pZBgCIAEoCRIMCgRuYW1lGAMgASgJEiAKBXVzZXJzGAQgAygLMhEucm9zaGFuLnVzZXIuVXNlciI2ChJTZW5kTWVzc2FnZVJlcXVlc3QSDwoHY29udGVudBgBIAEoCRIPCgdyb29tX2lkGAIgASgJIhUKE1NlbmRNZXNzYWdlUmVzcG9uc2UiIQoRQ3JlYXRlUm9vbVJlcXVlc3QSDAoEbmFtZRgBIAEoCSI1ChJDcmVhdGVSb29tUmVzcG9uc2USHwoEcm9vbRgBIAEoCzIRLnJvc2hhbi5jaGF0LlJvb20iEgoQTGlzdFJvb21zUmVxdWVzdCI1ChFMaXN0Um9vbXNSZXNwb25zZRIgCgVyb29tcxgBIAMoCzIRLnJvc2hhbi5jaGF0LlJvb20iHwoRRGVsZXRlUm9vbVJlcXVlc3QSCgoCaWQYASABKAkiNQoSRGVsZXRlUm9vbVJlc3BvbnNlEh8KBHJvb20YASABKAsyES5yb3NoYW4uY2hhdC5Sb29tMswDCgtDaGF0U2VydmljZRJ3CgtTZW5kTWVzc2FnZRIfLnJvc2hhbi5jaGF0LlNlbmRNZXNzYWdlUmVxdWVzdBogLnJvc2hhbi5jaGF0LlNlbmRNZXNzYWdlUmVzcG9uc2UiJYLT5JMCHzoBKiIaL2FwaS92MS9jaGF0L3Jvb21zL21lc3NhZ2USbAoKQ3JlYXRlUm9vbRIeLnJvc2hhbi5jaGF0LkNyZWF0ZVJvb21SZXF1ZXN0Gh8ucm9zaGFuLmNoYXQuQ3JlYXRlUm9vbVJlc3BvbnNlIh2C0+STAhc6ASoiEi9hcGkvdjEvY2hhdC9yb29tcxJmCglMaXN0Um9vbXMSHS5yb3NoYW4uY2hhdC5MaXN0Um9vbXNSZXF1ZXN0Gh4ucm9zaGFuLmNoYXQuTGlzdFJvb21zUmVzcG9uc2UiGoLT5JMCFBISL2FwaS92MS9jaGF0L3Jvb21zEm4KCkRlbGV0ZVJvb20SHi5yb3NoYW4uY2hhdC5EZWxldGVSb29tUmVxdWVzdBofLnJvc2hhbi5jaGF0LkRlbGV0ZVJvb21SZXNwb25zZSIfgtPkkwIZKhcvYXBpL3YxL2NoYXQvcm9vbXMve2lkfUI2WjRnaXRodWIuY29tL2Jvem90ZWFtL3Jvc2hhbi9hZGFwdGVyL2dycGMvZ2VuL2NoYXQ7Z2VuYgZwcm90bzM", [file_google_api_annotations, file_user_user]);
-
-/**
- * Describes the message roshan.chat.Room.
- * Use `create(RoomSchema)` to create a new message.
- */
-export const RoomSchema = /*@__PURE__*/
-  messageDesc(file_chat_chat, 0);
+  fileDesc("Cg9jaGF0L2NoYXQucHJvdG8SC3Jvc2hhbi5jaGF0IjYKElNlbmRNZXNzYWdlUmVxdWVzdBIPCgdjb250ZW50GAEgASgJEg8KB3Jvb21faWQYAiABKAkiFQoTU2VuZE1lc3NhZ2VSZXNwb25zZSIhChFDcmVhdGVSb29tUmVxdWVzdBIMCgRuYW1lGAEgASgJIjcKEkNyZWF0ZVJvb21SZXNwb25zZRIhCgRyb29tGAEgASgLMhMucm9zaGFuLmNvbW1vbi5Sb29tIhIKEExpc3RSb29tc1JlcXVlc3QiNwoRTGlzdFJvb21zUmVzcG9uc2USIgoFcm9vbXMYASADKAsyEy5yb3NoYW4uY29tbW9uLlJvb20iHwoRRGVsZXRlUm9vbVJlcXVlc3QSCgoCaWQYASABKAkiNwoSRGVsZXRlUm9vbVJlc3BvbnNlEiEKBHJvb20YASABKAsyEy5yb3NoYW4uY29tbW9uLlJvb20yzAMKC0NoYXRTZXJ2aWNlEncKC1NlbmRNZXNzYWdlEh8ucm9zaGFuLmNoYXQuU2VuZE1lc3NhZ2VSZXF1ZXN0GiAucm9zaGFuLmNoYXQuU2VuZE1lc3NhZ2VSZXNwb25zZSIlgtPkkwIfOgEqIhovYXBpL3YxL2NoYXQvcm9vbXMvbWVzc2FnZRJsCgpDcmVhdGVSb29tEh4ucm9zaGFuLmNoYXQuQ3JlYXRlUm9vbVJlcXVlc3QaHy5yb3NoYW4uY2hhdC5DcmVhdGVSb29tUmVzcG9uc2UiHYLT5JMCFzoBKiISL2FwaS92MS9jaGF0L3Jvb21zEmYKCUxpc3RSb29tcxIdLnJvc2hhbi5jaGF0Lkxpc3RSb29tc1JlcXVlc3QaHi5yb3NoYW4uY2hhdC5MaXN0Um9vbXNSZXNwb25zZSIagtPkkwIUEhIvYXBpL3YxL2NoYXQvcm9vbXMSbgoKRGVsZXRlUm9vbRIeLnJvc2hhbi5jaGF0LkRlbGV0ZVJvb21SZXF1ZXN0Gh8ucm9zaGFuLmNoYXQuRGVsZXRlUm9vbVJlc3BvbnNlIh+C0+STAhkqFy9hcGkvdjEvY2hhdC9yb29tcy97aWR9QjZaNGdpdGh1Yi5jb20vYm96b3RlYW0vcm9zaGFuL2FkYXB0ZXIvZ3JwYy9nZW4vY2hhdDtnZW5iBnByb3RvMw", [file_common_common, file_google_api_annotations, file_user_user]);
 
 /**
  * Describes the message roshan.chat.SendMessageRequest.
  * Use `create(SendMessageRequestSchema)` to create a new message.
  */
 export const SendMessageRequestSchema = /*@__PURE__*/
-  messageDesc(file_chat_chat, 1);
+  messageDesc(file_chat_chat, 0);
 
 /**
  * Describes the message roshan.chat.SendMessageResponse.
  * Use `create(SendMessageResponseSchema)` to create a new message.
  */
 export const SendMessageResponseSchema = /*@__PURE__*/
-  messageDesc(file_chat_chat, 2);
+  messageDesc(file_chat_chat, 1);
 
 /**
  * Describes the message roshan.chat.CreateRoomRequest.
  * Use `create(CreateRoomRequestSchema)` to create a new message.
  */
 export const CreateRoomRequestSchema = /*@__PURE__*/
-  messageDesc(file_chat_chat, 3);
+  messageDesc(file_chat_chat, 2);
 
 /**
  * Describes the message roshan.chat.CreateRoomResponse.
  * Use `create(CreateRoomResponseSchema)` to create a new message.
  */
 export const CreateRoomResponseSchema = /*@__PURE__*/
-  messageDesc(file_chat_chat, 4);
+  messageDesc(file_chat_chat, 3);
 
 /**
  * Describes the message roshan.chat.ListRoomsRequest.
  * Use `create(ListRoomsRequestSchema)` to create a new message.
  */
 export const ListRoomsRequestSchema = /*@__PURE__*/
-  messageDesc(file_chat_chat, 5);
+  messageDesc(file_chat_chat, 4);
 
 /**
  * Describes the message roshan.chat.ListRoomsResponse.
  * Use `create(ListRoomsResponseSchema)` to create a new message.
  */
 export const ListRoomsResponseSchema = /*@__PURE__*/
-  messageDesc(file_chat_chat, 6);
+  messageDesc(file_chat_chat, 5);
 
 /**
  * Describes the message roshan.chat.DeleteRoomRequest.
  * Use `create(DeleteRoomRequestSchema)` to create a new message.
  */
 export const DeleteRoomRequestSchema = /*@__PURE__*/
-  messageDesc(file_chat_chat, 7);
+  messageDesc(file_chat_chat, 6);
 
 /**
  * Describes the message roshan.chat.DeleteRoomResponse.
  * Use `create(DeleteRoomResponseSchema)` to create a new message.
  */
 export const DeleteRoomResponseSchema = /*@__PURE__*/
-  messageDesc(file_chat_chat, 8);
+  messageDesc(file_chat_chat, 7);
 
 /**
  * @generated from service roshan.chat.ChatService
