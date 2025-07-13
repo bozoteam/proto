@@ -10,15 +10,126 @@ import { User } from "../user/user";
 
 export const protobufPackage = "roshan.common";
 
+export enum RoomKind {
+  ROOM_KIND_UNSPECIFIED = 0,
+  ROOM_KIND_CHAT = 1,
+  ROOM_KIND_GAME = 2,
+  UNRECOGNIZED = -1,
+}
+
+export function roomKindFromJSON(object: any): RoomKind {
+  switch (object) {
+    case 0:
+    case "ROOM_KIND_UNSPECIFIED":
+      return RoomKind.ROOM_KIND_UNSPECIFIED;
+    case 1:
+    case "ROOM_KIND_CHAT":
+      return RoomKind.ROOM_KIND_CHAT;
+    case 2:
+    case "ROOM_KIND_GAME":
+      return RoomKind.ROOM_KIND_GAME;
+    case -1:
+    case "UNRECOGNIZED":
+    default:
+      return RoomKind.UNRECOGNIZED;
+  }
+}
+
+export function roomKindToJSON(object: RoomKind): string {
+  switch (object) {
+    case RoomKind.ROOM_KIND_UNSPECIFIED:
+      return "ROOM_KIND_UNSPECIFIED";
+    case RoomKind.ROOM_KIND_CHAT:
+      return "ROOM_KIND_CHAT";
+    case RoomKind.ROOM_KIND_GAME:
+      return "ROOM_KIND_GAME";
+    case RoomKind.UNRECOGNIZED:
+    default:
+      return "UNRECOGNIZED";
+  }
+}
+
+export interface UserList {
+  users: User[];
+}
+
 export interface Room {
   id: string;
   creator_id: string;
   name: string;
-  users: User[];
+  /** repeated roshan.user.User users = 4; */
+  allowed_teams: string[];
+  team_user_map: { [key: string]: UserList };
+  kind: RoomKind;
 }
 
+export interface Room_TeamUserMapEntry {
+  key: string;
+  value: UserList | undefined;
+}
+
+function createBaseUserList(): UserList {
+  return { users: [] };
+}
+
+export const UserList: MessageFns<UserList, "roshan.common.UserList"> = {
+  $type: "roshan.common.UserList" as const,
+
+  encode(message: UserList, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    for (const v of message.users) {
+      User.encode(v!, writer.uint32(10).fork()).join();
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): UserList {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseUserList();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1: {
+          if (tag !== 10) {
+            break;
+          }
+
+          message.users.push(User.decode(reader, reader.uint32()));
+          continue;
+        }
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): UserList {
+    return { users: globalThis.Array.isArray(object?.users) ? object.users.map((e: any) => User.fromJSON(e)) : [] };
+  },
+
+  toJSON(message: UserList): unknown {
+    const obj: any = {};
+    if (message.users?.length) {
+      obj.users = message.users.map((e) => User.toJSON(e));
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<UserList>, I>>(base?: I): UserList {
+    return UserList.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<UserList>, I>>(object: I): UserList {
+    const message = createBaseUserList();
+    message.users = object.users?.map((e) => User.fromPartial(e)) || [];
+    return message;
+  },
+};
+
 function createBaseRoom(): Room {
-  return { id: "", creator_id: "", name: "", users: [] };
+  return { id: "", creator_id: "", name: "", allowed_teams: [], team_user_map: {}, kind: 0 };
 }
 
 export const Room: MessageFns<Room, "roshan.common.Room"> = {
@@ -34,8 +145,14 @@ export const Room: MessageFns<Room, "roshan.common.Room"> = {
     if (message.name !== "") {
       writer.uint32(26).string(message.name);
     }
-    for (const v of message.users) {
-      User.encode(v!, writer.uint32(34).fork()).join();
+    for (const v of message.allowed_teams) {
+      writer.uint32(34).string(v!);
+    }
+    Object.entries(message.team_user_map).forEach(([key, value]) => {
+      Room_TeamUserMapEntry.encode({ key: key as any, value }, writer.uint32(42).fork()).join();
+    });
+    if (message.kind !== 0) {
+      writer.uint32(48).int32(message.kind);
     }
     return writer;
   },
@@ -76,7 +193,26 @@ export const Room: MessageFns<Room, "roshan.common.Room"> = {
             break;
           }
 
-          message.users.push(User.decode(reader, reader.uint32()));
+          message.allowed_teams.push(reader.string());
+          continue;
+        }
+        case 5: {
+          if (tag !== 42) {
+            break;
+          }
+
+          const entry5 = Room_TeamUserMapEntry.decode(reader, reader.uint32());
+          if (entry5.value !== undefined) {
+            message.team_user_map[entry5.key] = entry5.value;
+          }
+          continue;
+        }
+        case 6: {
+          if (tag !== 48) {
+            break;
+          }
+
+          message.kind = reader.int32() as any;
           continue;
         }
       }
@@ -93,7 +229,16 @@ export const Room: MessageFns<Room, "roshan.common.Room"> = {
       id: isSet(object.id) ? globalThis.String(object.id) : "",
       creator_id: isSet(object.creator_id) ? globalThis.String(object.creator_id) : "",
       name: isSet(object.name) ? globalThis.String(object.name) : "",
-      users: globalThis.Array.isArray(object?.users) ? object.users.map((e: any) => User.fromJSON(e)) : [],
+      allowed_teams: globalThis.Array.isArray(object?.allowed_teams)
+        ? object.allowed_teams.map((e: any) => globalThis.String(e))
+        : [],
+      team_user_map: isObject(object.team_user_map)
+        ? Object.entries(object.team_user_map).reduce<{ [key: string]: UserList }>((acc, [key, value]) => {
+          acc[key] = UserList.fromJSON(value);
+          return acc;
+        }, {})
+        : {},
+      kind: isSet(object.kind) ? roomKindFromJSON(object.kind) : 0,
     };
   },
 
@@ -108,8 +253,20 @@ export const Room: MessageFns<Room, "roshan.common.Room"> = {
     if (message.name !== "") {
       obj.name = message.name;
     }
-    if (message.users?.length) {
-      obj.users = message.users.map((e) => User.toJSON(e));
+    if (message.allowed_teams?.length) {
+      obj.allowed_teams = message.allowed_teams;
+    }
+    if (message.team_user_map) {
+      const entries = Object.entries(message.team_user_map);
+      if (entries.length > 0) {
+        obj.team_user_map = {};
+        entries.forEach(([k, v]) => {
+          obj.team_user_map[k] = UserList.toJSON(v);
+        });
+      }
+    }
+    if (message.kind !== 0) {
+      obj.kind = roomKindToJSON(message.kind);
     }
     return obj;
   },
@@ -122,7 +279,97 @@ export const Room: MessageFns<Room, "roshan.common.Room"> = {
     message.id = object.id ?? "";
     message.creator_id = object.creator_id ?? "";
     message.name = object.name ?? "";
-    message.users = object.users?.map((e) => User.fromPartial(e)) || [];
+    message.allowed_teams = object.allowed_teams?.map((e) => e) || [];
+    message.team_user_map = Object.entries(object.team_user_map ?? {}).reduce<{ [key: string]: UserList }>(
+      (acc, [key, value]) => {
+        if (value !== undefined) {
+          acc[key] = UserList.fromPartial(value);
+        }
+        return acc;
+      },
+      {},
+    );
+    message.kind = object.kind ?? 0;
+    return message;
+  },
+};
+
+function createBaseRoom_TeamUserMapEntry(): Room_TeamUserMapEntry {
+  return { key: "", value: undefined };
+}
+
+export const Room_TeamUserMapEntry: MessageFns<Room_TeamUserMapEntry, "roshan.common.Room.TeamUserMapEntry"> = {
+  $type: "roshan.common.Room.TeamUserMapEntry" as const,
+
+  encode(message: Room_TeamUserMapEntry, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.key !== "") {
+      writer.uint32(10).string(message.key);
+    }
+    if (message.value !== undefined) {
+      UserList.encode(message.value, writer.uint32(18).fork()).join();
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): Room_TeamUserMapEntry {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseRoom_TeamUserMapEntry();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1: {
+          if (tag !== 10) {
+            break;
+          }
+
+          message.key = reader.string();
+          continue;
+        }
+        case 2: {
+          if (tag !== 18) {
+            break;
+          }
+
+          message.value = UserList.decode(reader, reader.uint32());
+          continue;
+        }
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): Room_TeamUserMapEntry {
+    return {
+      key: isSet(object.key) ? globalThis.String(object.key) : "",
+      value: isSet(object.value) ? UserList.fromJSON(object.value) : undefined,
+    };
+  },
+
+  toJSON(message: Room_TeamUserMapEntry): unknown {
+    const obj: any = {};
+    if (message.key !== "") {
+      obj.key = message.key;
+    }
+    if (message.value !== undefined) {
+      obj.value = UserList.toJSON(message.value);
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<Room_TeamUserMapEntry>, I>>(base?: I): Room_TeamUserMapEntry {
+    return Room_TeamUserMapEntry.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<Room_TeamUserMapEntry>, I>>(object: I): Room_TeamUserMapEntry {
+    const message = createBaseRoom_TeamUserMapEntry();
+    message.key = object.key ?? "";
+    message.value = (object.value !== undefined && object.value !== null)
+      ? UserList.fromPartial(object.value)
+      : undefined;
     return message;
   },
 };
@@ -138,6 +385,10 @@ export type DeepPartial<T> = T extends Builtin ? T
 type KeysOfUnion<T> = T extends T ? keyof T : never;
 export type Exact<P, I extends P> = P extends Builtin ? P
   : P & { [K in keyof P]: Exact<P[K], I[K]> } & { [K in Exclude<keyof I, KeysOfUnion<P>>]: never };
+
+function isObject(value: any): boolean {
+  return typeof value === "object" && value !== null;
+}
 
 function isSet(value: any): boolean {
   return value !== null && value !== undefined;

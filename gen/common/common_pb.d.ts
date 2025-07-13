@@ -2,7 +2,7 @@
 // @generated from file common/common.proto (package roshan.common, syntax proto3)
 /* eslint-disable */
 
-import type { GenFile, GenMessage } from "@bufbuild/protobuf/codegenv1";
+import type { GenEnum, GenFile, GenMessage } from "@bufbuild/protobuf/codegenv1";
 import type { Message } from "@bufbuild/protobuf";
 import type { User } from "../user/user_pb";
 
@@ -10,6 +10,22 @@ import type { User } from "../user/user_pb";
  * Describes the file common/common.proto.
  */
 export declare const file_common_common: GenFile;
+
+/**
+ * @generated from message roshan.common.UserList
+ */
+export declare type UserList = Message<"roshan.common.UserList"> & {
+  /**
+   * @generated from field: repeated roshan.user.User users = 1;
+   */
+  users: User[];
+};
+
+/**
+ * Describes the message roshan.common.UserList.
+ * Use `create(UserListSchema)` to create a new message.
+ */
+export declare const UserListSchema: GenMessage<UserList>;
 
 /**
  * @generated from message roshan.common.Room
@@ -31,9 +47,21 @@ export declare type Room = Message<"roshan.common.Room"> & {
   name: string;
 
   /**
-   * @generated from field: repeated roshan.user.User users = 4;
+   * repeated roshan.user.User users = 4;
+   *
+   * @generated from field: repeated string allowed_teams = 4;
    */
-  users: User[];
+  allowedTeams: string[];
+
+  /**
+   * @generated from field: map<string, roshan.common.UserList> team_user_map = 5;
+   */
+  teamUserMap: { [key: string]: UserList };
+
+  /**
+   * @generated from field: roshan.common.RoomKind kind = 6;
+   */
+  kind: RoomKind;
 };
 
 /**
@@ -41,4 +69,29 @@ export declare type Room = Message<"roshan.common.Room"> & {
  * Use `create(RoomSchema)` to create a new message.
  */
 export declare const RoomSchema: GenMessage<Room>;
+
+/**
+ * @generated from enum roshan.common.RoomKind
+ */
+export enum RoomKind {
+  /**
+   * @generated from enum value: ROOM_KIND_UNSPECIFIED = 0;
+   */
+  UNSPECIFIED = 0,
+
+  /**
+   * @generated from enum value: ROOM_KIND_CHAT = 1;
+   */
+  CHAT = 1,
+
+  /**
+   * @generated from enum value: ROOM_KIND_GAME = 2;
+   */
+  GAME = 2,
+}
+
+/**
+ * Describes the enum roshan.common.RoomKind.
+ */
+export declare const RoomKindSchema: GenEnum<RoomKind>;
 

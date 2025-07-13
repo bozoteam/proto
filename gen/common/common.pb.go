@@ -23,19 +23,115 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
-type Room struct {
+type RoomKind int32
+
+const (
+	RoomKind_ROOM_KIND_UNSPECIFIED RoomKind = 0
+	RoomKind_ROOM_KIND_CHAT        RoomKind = 1
+	RoomKind_ROOM_KIND_GAME        RoomKind = 2
+)
+
+// Enum value maps for RoomKind.
+var (
+	RoomKind_name = map[int32]string{
+		0: "ROOM_KIND_UNSPECIFIED",
+		1: "ROOM_KIND_CHAT",
+		2: "ROOM_KIND_GAME",
+	}
+	RoomKind_value = map[string]int32{
+		"ROOM_KIND_UNSPECIFIED": 0,
+		"ROOM_KIND_CHAT":        1,
+		"ROOM_KIND_GAME":        2,
+	}
+)
+
+func (x RoomKind) Enum() *RoomKind {
+	p := new(RoomKind)
+	*p = x
+	return p
+}
+
+func (x RoomKind) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (RoomKind) Descriptor() protoreflect.EnumDescriptor {
+	return file_common_common_proto_enumTypes[0].Descriptor()
+}
+
+func (RoomKind) Type() protoreflect.EnumType {
+	return &file_common_common_proto_enumTypes[0]
+}
+
+func (x RoomKind) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Use RoomKind.Descriptor instead.
+func (RoomKind) EnumDescriptor() ([]byte, []int) {
+	return file_common_common_proto_rawDescGZIP(), []int{0}
+}
+
+type UserList struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
-	CreatorId     string                 `protobuf:"bytes,2,opt,name=creator_id,json=creatorId,proto3" json:"creator_id,omitempty"`
-	Name          string                 `protobuf:"bytes,3,opt,name=name,proto3" json:"name,omitempty"`
-	Users         []*user.User           `protobuf:"bytes,4,rep,name=users,proto3" json:"users,omitempty"`
+	Users         []*user.User           `protobuf:"bytes,1,rep,name=users,proto3" json:"users,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *UserList) Reset() {
+	*x = UserList{}
+	mi := &file_common_common_proto_msgTypes[0]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *UserList) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*UserList) ProtoMessage() {}
+
+func (x *UserList) ProtoReflect() protoreflect.Message {
+	mi := &file_common_common_proto_msgTypes[0]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use UserList.ProtoReflect.Descriptor instead.
+func (*UserList) Descriptor() ([]byte, []int) {
+	return file_common_common_proto_rawDescGZIP(), []int{0}
+}
+
+func (x *UserList) GetUsers() []*user.User {
+	if x != nil {
+		return x.Users
+	}
+	return nil
+}
+
+type Room struct {
+	state     protoimpl.MessageState `protogen:"open.v1"`
+	Id        string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	CreatorId string                 `protobuf:"bytes,2,opt,name=creator_id,json=creatorId,proto3" json:"creator_id,omitempty"`
+	Name      string                 `protobuf:"bytes,3,opt,name=name,proto3" json:"name,omitempty"`
+	// repeated roshan.user.User users = 4;
+	AllowedTeams  []string             `protobuf:"bytes,4,rep,name=allowed_teams,json=allowedTeams,proto3" json:"allowed_teams,omitempty"`
+	TeamUserMap   map[string]*UserList `protobuf:"bytes,5,rep,name=team_user_map,json=teamUserMap,proto3" json:"team_user_map,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
+	Kind          RoomKind             `protobuf:"varint,6,opt,name=kind,proto3,enum=roshan.common.RoomKind" json:"kind,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
 func (x *Room) Reset() {
 	*x = Room{}
-	mi := &file_common_common_proto_msgTypes[0]
+	mi := &file_common_common_proto_msgTypes[1]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -47,7 +143,7 @@ func (x *Room) String() string {
 func (*Room) ProtoMessage() {}
 
 func (x *Room) ProtoReflect() protoreflect.Message {
-	mi := &file_common_common_proto_msgTypes[0]
+	mi := &file_common_common_proto_msgTypes[1]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -60,7 +156,7 @@ func (x *Room) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Room.ProtoReflect.Descriptor instead.
 func (*Room) Descriptor() ([]byte, []int) {
-	return file_common_common_proto_rawDescGZIP(), []int{0}
+	return file_common_common_proto_rawDescGZIP(), []int{1}
 }
 
 func (x *Room) GetId() string {
@@ -84,24 +180,49 @@ func (x *Room) GetName() string {
 	return ""
 }
 
-func (x *Room) GetUsers() []*user.User {
+func (x *Room) GetAllowedTeams() []string {
 	if x != nil {
-		return x.Users
+		return x.AllowedTeams
 	}
 	return nil
+}
+
+func (x *Room) GetTeamUserMap() map[string]*UserList {
+	if x != nil {
+		return x.TeamUserMap
+	}
+	return nil
+}
+
+func (x *Room) GetKind() RoomKind {
+	if x != nil {
+		return x.Kind
+	}
+	return RoomKind_ROOM_KIND_UNSPECIFIED
 }
 
 var File_common_common_proto protoreflect.FileDescriptor
 
 const file_common_common_proto_rawDesc = "" +
 	"\n" +
-	"\x13common/common.proto\x12\rroshan.common\x1a\x1cgoogle/api/annotations.proto\x1a\x0fuser/user.proto\"r\n" +
+	"\x13common/common.proto\x12\rroshan.common\x1a\x1cgoogle/api/annotations.proto\x1a\x0fuser/user.proto\"3\n" +
+	"\bUserList\x12'\n" +
+	"\x05users\x18\x01 \x03(\v2\x11.roshan.user.UserR\x05users\"\xbe\x02\n" +
 	"\x04Room\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x1d\n" +
 	"\n" +
 	"creator_id\x18\x02 \x01(\tR\tcreatorId\x12\x12\n" +
-	"\x04name\x18\x03 \x01(\tR\x04name\x12'\n" +
-	"\x05users\x18\x04 \x03(\v2\x11.roshan.user.UserR\x05usersB8Z6github.com/bozoteam/roshan/adapter/grpc/gen/common;genb\x06proto3"
+	"\x04name\x18\x03 \x01(\tR\x04name\x12#\n" +
+	"\rallowed_teams\x18\x04 \x03(\tR\fallowedTeams\x12H\n" +
+	"\rteam_user_map\x18\x05 \x03(\v2$.roshan.common.Room.TeamUserMapEntryR\vteamUserMap\x12+\n" +
+	"\x04kind\x18\x06 \x01(\x0e2\x17.roshan.common.RoomKindR\x04kind\x1aW\n" +
+	"\x10TeamUserMapEntry\x12\x10\n" +
+	"\x03key\x18\x01 \x01(\tR\x03key\x12-\n" +
+	"\x05value\x18\x02 \x01(\v2\x17.roshan.common.UserListR\x05value:\x028\x01*M\n" +
+	"\bRoomKind\x12\x19\n" +
+	"\x15ROOM_KIND_UNSPECIFIED\x10\x00\x12\x12\n" +
+	"\x0eROOM_KIND_CHAT\x10\x01\x12\x12\n" +
+	"\x0eROOM_KIND_GAME\x10\x02B8Z6github.com/bozoteam/roshan/adapter/grpc/gen/common;genb\x06proto3"
 
 var (
 	file_common_common_proto_rawDescOnce sync.Once
@@ -115,18 +236,25 @@ func file_common_common_proto_rawDescGZIP() []byte {
 	return file_common_common_proto_rawDescData
 }
 
-var file_common_common_proto_msgTypes = make([]protoimpl.MessageInfo, 1)
+var file_common_common_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
+var file_common_common_proto_msgTypes = make([]protoimpl.MessageInfo, 3)
 var file_common_common_proto_goTypes = []any{
-	(*Room)(nil),      // 0: roshan.common.Room
-	(*user.User)(nil), // 1: roshan.user.User
+	(RoomKind)(0),     // 0: roshan.common.RoomKind
+	(*UserList)(nil),  // 1: roshan.common.UserList
+	(*Room)(nil),      // 2: roshan.common.Room
+	nil,               // 3: roshan.common.Room.TeamUserMapEntry
+	(*user.User)(nil), // 4: roshan.user.User
 }
 var file_common_common_proto_depIdxs = []int32{
-	1, // 0: roshan.common.Room.users:type_name -> roshan.user.User
-	1, // [1:1] is the sub-list for method output_type
-	1, // [1:1] is the sub-list for method input_type
-	1, // [1:1] is the sub-list for extension type_name
-	1, // [1:1] is the sub-list for extension extendee
-	0, // [0:1] is the sub-list for field type_name
+	4, // 0: roshan.common.UserList.users:type_name -> roshan.user.User
+	3, // 1: roshan.common.Room.team_user_map:type_name -> roshan.common.Room.TeamUserMapEntry
+	0, // 2: roshan.common.Room.kind:type_name -> roshan.common.RoomKind
+	1, // 3: roshan.common.Room.TeamUserMapEntry.value:type_name -> roshan.common.UserList
+	4, // [4:4] is the sub-list for method output_type
+	4, // [4:4] is the sub-list for method input_type
+	4, // [4:4] is the sub-list for extension type_name
+	4, // [4:4] is the sub-list for extension extendee
+	0, // [0:4] is the sub-list for field type_name
 }
 
 func init() { file_common_common_proto_init() }
@@ -139,13 +267,14 @@ func file_common_common_proto_init() {
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_common_common_proto_rawDesc), len(file_common_common_proto_rawDesc)),
-			NumEnums:      0,
-			NumMessages:   1,
+			NumEnums:      1,
+			NumMessages:   3,
 			NumExtensions: 0,
 			NumServices:   0,
 		},
 		GoTypes:           file_common_common_proto_goTypes,
 		DependencyIndexes: file_common_common_proto_depIdxs,
+		EnumInfos:         file_common_common_proto_enumTypes,
 		MessageInfos:      file_common_common_proto_msgTypes,
 	}.Build()
 	File_common_common_proto = out.File

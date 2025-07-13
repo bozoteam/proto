@@ -2,7 +2,7 @@
 // @generated from file common/common.proto (package roshan.common, syntax proto3)
 /* eslint-disable */
 
-import { fileDesc, messageDesc } from "@bufbuild/protobuf/codegenv1";
+import { enumDesc, fileDesc, messageDesc, tsEnum } from "@bufbuild/protobuf/codegenv1";
 import { file_google_api_annotations } from "../google/api/annotations_pb";
 import { file_user_user } from "../user/user_pb";
 
@@ -10,12 +10,31 @@ import { file_user_user } from "../user/user_pb";
  * Describes the file common/common.proto.
  */
 export const file_common_common = /*@__PURE__*/
-  fileDesc("ChNjb21tb24vY29tbW9uLnByb3RvEg1yb3NoYW4uY29tbW9uIlYKBFJvb20SCgoCaWQYASABKAkSEgoKY3JlYXRvcl9pZBgCIAEoCRIMCgRuYW1lGAMgASgJEiAKBXVzZXJzGAQgAygLMhEucm9zaGFuLnVzZXIuVXNlckI4WjZnaXRodWIuY29tL2Jvem90ZWFtL3Jvc2hhbi9hZGFwdGVyL2dycGMvZ2VuL2NvbW1vbjtnZW5iBnByb3RvMw", [file_google_api_annotations, file_user_user]);
+  fileDesc("ChNjb21tb24vY29tbW9uLnByb3RvEg1yb3NoYW4uY29tbW9uIiwKCFVzZXJMaXN0EiAKBXVzZXJzGAEgAygLMhEucm9zaGFuLnVzZXIuVXNlciL8AQoEUm9vbRIKCgJpZBgBIAEoCRISCgpjcmVhdG9yX2lkGAIgASgJEgwKBG5hbWUYAyABKAkSFQoNYWxsb3dlZF90ZWFtcxgEIAMoCRI7Cg10ZWFtX3VzZXJfbWFwGAUgAygLMiQucm9zaGFuLmNvbW1vbi5Sb29tLlRlYW1Vc2VyTWFwRW50cnkSJQoEa2luZBgGIAEoDjIXLnJvc2hhbi5jb21tb24uUm9vbUtpbmQaSwoQVGVhbVVzZXJNYXBFbnRyeRILCgNrZXkYASABKAkSJgoFdmFsdWUYAiABKAsyFy5yb3NoYW4uY29tbW9uLlVzZXJMaXN0OgI4ASpNCghSb29tS2luZBIZChVST09NX0tJTkRfVU5TUEVDSUZJRUQQABISCg5ST09NX0tJTkRfQ0hBVBABEhIKDlJPT01fS0lORF9HQU1FEAJCOFo2Z2l0aHViLmNvbS9ib3pvdGVhbS9yb3NoYW4vYWRhcHRlci9ncnBjL2dlbi9jb21tb247Z2VuYgZwcm90bzM", [file_google_api_annotations, file_user_user]);
+
+/**
+ * Describes the message roshan.common.UserList.
+ * Use `create(UserListSchema)` to create a new message.
+ */
+export const UserListSchema = /*@__PURE__*/
+  messageDesc(file_common_common, 0);
 
 /**
  * Describes the message roshan.common.Room.
  * Use `create(RoomSchema)` to create a new message.
  */
 export const RoomSchema = /*@__PURE__*/
-  messageDesc(file_common_common, 0);
+  messageDesc(file_common_common, 1);
+
+/**
+ * Describes the enum roshan.common.RoomKind.
+ */
+export const RoomKindSchema = /*@__PURE__*/
+  enumDesc(file_common_common, 0);
+
+/**
+ * @generated from enum roshan.common.RoomKind
+ */
+export const RoomKind = /*@__PURE__*/
+  tsEnum(RoomKindSchema);
 

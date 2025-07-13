@@ -194,6 +194,36 @@
         "name": {
           "type": "string"
         },
+        "allowedTeams": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "title": "repeated roshan.user.User users = 4;"
+        },
+        "teamUserMap": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/definitions/commonUserList"
+          }
+        },
+        "kind": {
+          "$ref": "#/definitions/commonRoomKind"
+        }
+      }
+    },
+    "commonRoomKind": {
+      "type": "string",
+      "enum": [
+        "ROOM_KIND_UNSPECIFIED",
+        "ROOM_KIND_CHAT",
+        "ROOM_KIND_GAME"
+      ],
+      "default": "ROOM_KIND_UNSPECIFIED"
+    },
+    "commonUserList": {
+      "type": "object",
+      "properties": {
         "users": {
           "type": "array",
           "items": {
